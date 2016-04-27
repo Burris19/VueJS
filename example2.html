@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE-edge">
+	<meta name="viewport" content="width=device-width, initial-scale 1">
+	
+	<title>Styde.net | Curso de Vue.js</title>
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<script src="vue.js"></script>
+
+</head>
+<body id="app">
+
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+
+			<!-- <h1 v-if="name">Bienvenido, {{ name }}</h1> -->
+			<h1 v-show="name">{{ gender == 'm' ? 'Bienvenido' : 'Bienvenida' }}, {{ name }}</h1>
+
+			<p v-show="name">Espero que disfrutes tu vista</p>
+			<p v-else>Por favor escribe tu nombre</p>
+			<p>Tu nombre al reves es: {{ name.split('').reverse().join('') }}</p>
+
+			<input type="text" v-model="name" class="form-control">		
+			<p v-if="name=''" class="alert alert-danger">
+				Este campo es obligatorio
+			</p>
+			<p v-if="name.length <2" class="alert alert-danger">
+				El nombre es valido
+			</p>
+
+			<select v-model="gender" class="form-control">
+				<option value="m">Masculino</option>
+				<option value="f">Femenino</option>
+			</select>
+			
+			<hr>
+
+			<pre>{{ $data | json }}</pre>			
+		</div>
+	</div>
+
+	
+	<script>
+		new Vue({
+			el: "#app",
+			data: {
+				name: "",
+				gender: "m"
+	
+			}
+		})
+	</script>
+</body>
+</html>
