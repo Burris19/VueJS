@@ -45,11 +45,12 @@
 				<p>
 					Respuesta: <strong>{{ years_php }}</strong>
 
-					<button type="button" class="btn" @click="yearsPhp(true)">+</button>
-					<button type="button" class="btn" @click="yearsPhp(false)">-</button>
+					<button type="button" v-bind:class="{btn: true, 'btn-danger': years_php > 10}" @click="yearsPhp(true)">+</button>
+					<button type="button" class="btn" v-bind:disabled="years_php == 0" @click="yearsPhp(false)">-</button>
 				</p>
 
 
+				<img src="logo.png" v-bind:title="years_php">
 
 				<hr>
 				<p v-show="name">
