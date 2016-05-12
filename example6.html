@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE-edge">
+	<meta name="viewport" content="width=device-width, initial-scale 1">
+	
+	<title>Styde.net | Curso de Vue.js</title>
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<script src="vue.js"></script>
+</head>
+<body>
+		<div class="container" style="padding-top: 50px; padding-bottom: 50px">
+			<form action="" class="form" @submit.prevent="create_note">
+				<div class="row">
+					<label for="">Nota</label>
+					<textarea rows="3" class="form-control" v-model="new_note.note">
+						
+					</textarea>
+				</div>
+				<div class="row">
+					<label for="">Autor</label>
+					<input type="text" class="form-control" v-model="new_note.autor">
+					<input type="hidden" v-model="new_note.like" value="0">
+				</div>
+				<hr>
+				<div class="row">
+					<button type="submit" class="btn btn-primary">Guardar Nota</button>	
+				</div>				
+			</form>
+		</div>
+		
+
+
+		<ul v-for="note in notes">
+			<li>{{ $index + 1 }}: {{ note.note }} por  				
+				<a href="#" v-on:click="likes($index)" style="text-decoration: none">
+					<strong>
+						<span style="font-size: 1em" v-if= "note.like > 0" class="label label-warning"> <i class="glyphicon glyphicon-thumbs-up"></i>{{ note.autor }}</span>
+						<span v-if= "note.like == 0" class="label label-primary">{{ note.autor }}</span>
+					</strong>
+				</a>
+
+			</li>
+		</ul>
+
+		<pre>{{ $data | json }}</pre>	
+
+	<script>
+		new Vue({
+			el: 'body',
+			data: {
+				notes: [
+					{
+						note: 'v-for es la directiva que utilizamos para iterar una lista',
+						autor: 'Julian',
+						like: 0
+					},
+					{
+						note: '@click se utiliza como un alias de v:on:click',
+						autor: 'Vicente',
+						like: 0
+					},
+					{
+						note: 'Con Vue puedes crear tus propios componentes',
+						autor: 'Mirian',
+						like: 0
+					},
+					{
+						note: 'El curso de Vue.js en Styde es genial',
+						autor: 'Angel',
+						like: 0
+					},
+					{
+						note: 'Registrate hoy en Styde.net',
+						autor: 'Frank',
+						like: 0
+					}
+					
+				]
+			},
+			methods: {
+				create_note: function () {					
+					this.notes.push(this.new_note);
+					this.new_note = { note: '', autor: '', like:0}
+				},
+				likes: function(index){					
+					var like = this.notes[index].like;
+					if(like == 0){
+						this.notes[index].like = 1;
+					}else{
+						this.notes[index].like = 0;
+					}
+				}
+			}
+		})
+	</script>
+</body>
+</html> 
