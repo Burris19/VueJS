@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE-edge">
+	<meta name="viewport" content="width=device-width, initial-scale 1">
+	
+	<title>Styde.net | Curso de Vue.js</title>
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<script src="vue.js"></script>
+
+</head>
+<body id="app">
+
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+
+			<!-- <h1 v-if="name">Bienvenido, {{ name }}</h1> -->
+			<h1 v-show="name">{{ welcome_message }}, {{ name }}</h1>
+
+			<p v-show="name">Espero que disfrutes tu vista</p>
+			<p v-else>Por favor escribe tu nombre</p>
+			<p>Tu nombre al reves es: {{ name.split('').reverse().join('') }}</p>
+
+
+			<form @submit="singUp(false, $event)">
+				<label for="">Primer nombre</label>
+				<input type="text" v-model="first_name" class="form-control">		
+				<label for="">Apellido</label>
+				<input type="text" v-model="last_name" class="form-control">		
+				<p v-if="name=''" class="alert alert-danger">
+					Este campo es obligatorio
+				</p>
+<!-- 				<p v-if="name.length < 2" class="alert alert-danger">
+					El nombre es valido
+				</p> -->
+				<hr>
+				<label for="">Selecciona tu genero</label>
+				<select v-model="gender" class="form-control">
+					<option value="m">Masculino</option>
+					<option value="f">Femenino</option>
+				</select>			
+				
+				<hr>
+
+				<label for="">
+					Hablas espa;ol?
+					<input type="checkbox" v-model="spanish">
+				</label>
+				
+				<p>Cuantos anos de experiencia tienes con PHP?</p>
+				<p>
+					Respuesta: <strong>{{ years_php }}</strong>
+
+					<button type="button" v-bind:class="{btn: true, 'btn-danger': years_php > 10}" @click="yearsPhp(true)">+</button>
+					<button type="button" class="btn" v-bind:disabled="years_php == 0" @click="yearsPhp(false)">-</button>
+					{{ experience }}
+				</p>
+				
+
+
+				<img src="logo.png" v-bind:title="years_php">
+
+				<hr>
+				<p v-show="name">
+					<!-- <button type="submit" class="btn btn-primary" v-on:click.prevent='singUp'>  -->
+					<!-- <button type="submit" class="btn btn-primary" @click.prevent='singUp'>  podemos utilizar la @ en lugar de v-on -->
+					<button type="submit" class="btn btn-primary">
+						Registrar
+					</button>
+
+					<button type="submit" class="btn btn-primary" @click="singUp(true, $event)">
+						Registrar y sal del sistema
+					</button>
+				</p>
+			</form>
+			
+			<hr>
+
+			<pre>{{ $data | json }}</pre>			
+		</div>
+	</div>
+
+	
+	<script> 
+		new Vue({
+			el: "#app",
+			data: {
+				first_name: "",
+				last_name: "",
+				gender: "m",
+				spanish: true,
+				years_php: 0
+	
+			},
+			computed: {
+
+				welcome_message: function() {
+
+					if(this.spanish) {
+						return this.gender == 'm' ? 'Bienvenido' : 'Bienvenida';	
+					}
+
+					return 'Welcome'
+					
+					
+				},
+				name: function() {
+					if (this.first_name || this.last_name) {
+						return this.first_name + ' ' + this.last_name;
+					}
+
+					return '';
+					
+				},
+				experience: function(){
+					if(this.years_php >=5){
+						message = 'Experto';
+					}else if(this.years_php >= 3){
+						message = 'Intermedio'	
+					}else{
+						message = 'Inicial'
+					}
+
+					return message;
+				}
+				
+			},
+			methods: {
+				singUp: function (logout, event) {
+					event.preventDefault();
+					alert(this.name + ', por favor espera mientras te registramos');
+					if(logout){
+						alert("Saliedno del sistema");
+					}
+				},
+				yearsPhp: function(accion){
+					if(!accion){
+						if(this.years_php > 0 )
+							this.years_php --;
+					}else{
+						this.years_php ++;	
+					}					
+
+				}
+			}
+		})
+	</script>
+</body>
+</html>
