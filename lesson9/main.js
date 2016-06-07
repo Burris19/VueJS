@@ -8,9 +8,50 @@ function findById(items, id) {
 	return null;
 }
 
+
+Vue.filter('category', function(id) {
+
+	var category = findById(this.categories, id);
+
+	return category != null ? category.name : '';
+		
+
+});
+
+Vue.component('select-category', {
+	template: "#select_category_tpl",
+	props: ['categories', 'id']
+});
+
+
+Vue.component('note-row', {
+	template: "#note_row_tpl",
+	props: ['note', 'categories'],
+	data: function() {
+		return {
+			editing: false
+		}
+	},
+	methods: {
+		remove: function () {
+			this.$parent.notes.$remove(this.note);
+		},
+		edit: function () {		
+			this.editing = true;
+		},
+		update: function () {
+			this.editing = false;
+		}
+	}
+});
+
 var vm = new Vue({
 	el: 'body',
 	data: {
+		new_note: {
+			note: '',
+			category_id: ''
+		},
 		notes: [
 			{
 				note: 'Laravel 5.1 es LTS',
@@ -45,21 +86,12 @@ var vm = new Vue({
 		]
 	},
 	filters: {
-		category: function (id) {
-			var category = findById(this.categories, id);
-
-			return category != null ? category.name : '';
-		}
+		
 	},
 	methods: {
-		deleteNote: function (note) {
-			this.notes.$remove(note);
-		},
-		editNote: function (note) {		
-			Vue.set(note, 'editing', true);				
-		},
-		updateNote: function (note) {
-			Vue.set(note, 'editing', false);	
+		createNote: function () {
+			this.notes.push(this.new_note);
+			this.new_note = {note: '', category_id: ''};
 		}
 	}
 });
