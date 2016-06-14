@@ -19,3 +19,8 @@ Route::get('/', function () {
 Route::get('name', function () {
 	return \App\User::first()->name;
 });
+
+Route::group(['namespace' => 'Api'], function () {
+	Route::resource('api/v1/notes', 'NoteController');
+});
+
