@@ -19,3 +19,4 @@ Route::get('/', function () {
 Route::get('name', function () {
 	return App\User::first()->name;
 });
+
