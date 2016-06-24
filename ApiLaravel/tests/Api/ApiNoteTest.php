@@ -64,4 +64,135 @@ class ApiNoteTest extends TestCase
             'success' => false,
         ]);   
     }    
+
+
+    function tests_can_update_a_note() 
+    {
+        /*
+        *   Variable wiht text for update
+        */
+        $text = 'Update note';
+
+        /*
+        *   Create a new category
+        */
+        $category = factory(Category::class)->create();
+
+        /*
+        * Create another category for update
+        */
+
+        $anotherCategory = factory(Category::class)->create();
+
+        /*
+        * Create a note
+        */
+
+        $note = factory(Note::class)->make();
+
+        /*
+        * Relation note with category
+        */
+
+        $category->notes()->save($note);
+
+        /*
+        *  Send request for update note
+        */
+        $this->put('api/v1/notes'. $note->id, [
+            'note'          => $text,
+            'category_id'   => $anotherCategory->id,
+        ]);
+
+        /*
+        * Check that in database update note
+        */
+
+        $this->seeInDatabase('notes', [
+            'note'          => $text,
+            'category_id'   => $anotherCategory->id
+        ]);
+
+        /*
+        * Ckeck that response in format Json
+        */
+
+        // $this->seeJsonEquals([
+        //     'success' => true,
+        //     'note' => [
+        //     'id' => $note->id,
+        //     'note' => $text,
+        //     'category_id' => $anotherCategory->id,
+        //     ],
+        //  ]);
+    }
+
+
+    function test_validation_when_updating_a_note()
+    {
+        /*
+        *   Create a new category
+        */
+        $category = factory(Category::class)->create();
+
+        /*
+        * Create a note
+        */
+
+        $note = factory(Note::class)->make();
+
+        /*
+        * Relation note with category
+        */
+
+        $category->notes()->save($note);
+
+        /*
+        *   Send request with parament invalid
+        */
+        $this->put('api/v1/notes'. $note->id, [
+            'note'          => '',
+            'category_id'   => 100,
+        ], ['Accept' => 'aplication/json']);
+
+        /*
+        * Check that not save note in the database
+        */
+
+        $this->dontSeeInDatabase('notes', [
+            'id'    => $note->id,
+            'note'  => '',            
+        ]);
+
+        /*
+        *   Check that response with errors
+        */
+        // $this->seeJsonEquals([
+        //      'success' => false,
+        //      'errors'  => [
+        //          'The note field is required.',
+        //          'The selected category is invalid.'
+        //      ]
+        //  ]);
+
+
+    }    
+
+    function test_can_delete_a_note()
+    {
+        $note = factory(Note::class)->create();
+
+        $this->delete('api/v1/notes/'.$note->id, [], [
+            'Accept' => 'application/json'
+        ]);
+
+        $this->dontSeeInDatabase('notes', [
+            'id' => $note->id
+        ]);
+
+        $this->seeJsonEquals([
+            'success' => true
+        ]);
+    }
+
 }

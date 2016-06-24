@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Note;
 
-class NoteController extends Controller
+class Test extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +16,18 @@ class NoteController extends Controller
      */
     public function index()
     {
-        return Note::all();
+        return "index";
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -28,20 +37,7 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->only(['note', 'category_id']);
-
-        $this->validate($request, [
-            'note'  => 'required',
-            'category_id' => 'exists:categories,id'
-        ]);
-
-        $note = Note::create($data);
-
-        return [
-            'success' => true,
-            'note' => $note->toArray()
-        ];
-
+        return $request->all();
     }
 
     /**
@@ -52,10 +48,21 @@ class NoteController extends Controller
      */
     public function show($id)
     {
-        
+        //
     }
 
-     /**
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -64,24 +71,17 @@ class NoteController extends Controller
      */
     public function update(Request $request, $id)
     {
-          $data = $request->only(['note', 'category_id', 'id']);
-          return $data;
+        return $request->all();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $note = Note::findOrFail($id);
-
-        $note->delete();
-
-        return [
-            'success' => true
-        ];
+        return $id;
     }
 }
