@@ -64,8 +64,23 @@ class NoteController extends Controller
      */
     public function update(Request $request, $id)
     {
-          $data = $request->only(['note', 'category_id', 'id']);
-          return $data;
+          $data = $request->only(['note', 'category_id']);
+          
+
+        $this->validate($request, [
+            'note'  => 'required',
+            'category_id' => 'exists:categories,id'
+        ]);
+
+
+        $note = Note::findOrFail($id);
+
+        $note->fill($data);
+
+        $note->save();
+
+        return $note;
+
     }
 
     /**

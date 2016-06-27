@@ -59,7 +59,7 @@ class Test extends Controller
      */
     public function edit($id)
     {
-        //
+         return $request->all();
     }
 
     /**
@@ -71,7 +71,9 @@ class Test extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $request->all();
+        $attributes = $request->all();
+        return $attributes ;
+        #return $request->all();
     }
 
     /**
