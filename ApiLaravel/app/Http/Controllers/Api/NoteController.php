@@ -79,7 +79,10 @@ class NoteController extends Controller
 
         $note->save();
 
-        return $note;
+        return [
+            'success' => true,
+            'note' => $note
+        ];
 
     }
 
