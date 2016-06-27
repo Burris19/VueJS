@@ -23,7 +23,9 @@ class AddCategoriesColumnToNotes extends Migration
      * @return void
      */
     public function down()
-    {
-        Schema::dropColumn('category_id');
+    {        
+        Schema::table('notes', function (Blueprint $table) {
+            $table->dropColumn('category_id');
+        });
     }
 }
