@@ -25,13 +25,27 @@ Vue.component('note-row', {
     data: function() { 
         return {
             editing: false,
-            errors: [],
+            errors: [],            
             draft: {}
         };
     },
     methods: {
         remove: function () {
-            this.$parent.notes.$remove(this.note);
+            $.ajax({
+                url: '/vuej/ApiLaravel/public/api/v1/notes/'+this.note.id,
+                method: 'DELETE',
+                dataType: 'json',                
+                success: function (data) {
+                    this.$parent.notes.$remove(this.note);        
+                }.bind(this),
+                error: function (jqXHR) {
+                    this.$parrent.error = jqXHR.responseJSON.message;
+                    $('#error_message').delay(3000).fadeOut(1000, function() {
+                        this.$parent.error = '';
+                    });
+                }.bind(this)
+            });
+            
         },
         edit: function () {
             this.errors = [];
@@ -72,6 +86,7 @@ var vm = new Vue({
         },
         notes: [],
         errors: [],
+        error: '',
         categories: [
             {
                 id: 1,
