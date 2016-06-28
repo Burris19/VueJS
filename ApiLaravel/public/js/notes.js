@@ -31,14 +31,17 @@ Vue.component('note-row', {
     },
     methods: {
         remove: function () {
-            var component = this;
+
+            this.$dispatch('delete-note', this.note);
+
+            // var component = this;
             // this.$http.delete('/vuej/ApiLaravel/public/api/v1/notes/'+this.note.id).then(function (response) {
             //     this.$parent.notes.$remove(this.note);
             // });
 
-            resource.delete({id: this.note.id}).then(function (response) {
-                this.notes.$remove(component.note);
-            });
+            // resource.delete({id: this.note.id}).then(function (response) {
+            //     this.notes.$remove(component.note);
+            // });
 
             // $.ajax({
             //     url: '/vuej/ApiLaravel/public/api/v1/notes/'+this.note.id,
@@ -67,14 +70,13 @@ Vue.component('note-row', {
         update: function () {
             this.errors = [];
 
-            var component = this;
+            this.$dispatch('update-note', this);
 
-
-            resource.update({id: this.note.id}, this.draft ).then(function (response) {
-                this.notes.$set(this.notes.indexOf(component.note), response.data.note)
-            }, function (response) {
-                component.errors = response.data.errors;
-            });
+            // resource.update({id: this.note.id}, this.draft ).then(function (response) {
+            //     this.notes.$set(this.notes.indexOf(component.note), response.data.note)
+            // }, function (response) {
+            //     component.errors = response.data.errors;
+            // });
 
             // this.$http.put('/vuej/ApiLaravel/public/api/v1/notes/'+this.note.id, this.draft ).then(function (response) {
             //     this.$parent.notes.$set(this.$parent.notes.indexOf(this.note), response.data.note)
@@ -143,6 +145,27 @@ var vm = new Vue({
         // $.getJSON('/vuej/ApiLaravel/public/api/v1/notes', [], function (notes) {
         //     vm.notes = notes;
         // });
+    },
+    events: {
+        'delete-note': function(note){
+            resource.delete({id: note.id}).then(function (response) {
+                this.notes.$remove(note);
+            });
+        },
+        'update-note': function (component) {
+
+            resource.update({id: component.note.id}, component.draft ).then(function (response) {
+                
+                for(var key in response.data.note) {
+                    component.note[key] = response.data.note[key];
+                }
+
+                component.editing = false;
+
+            }, function (response) {
+                component.errors = response.data.errors;
+            });
+        }
     },
     methods: {
         createNote: function () {                
