@@ -76,8 +76,9 @@
     </tr>
   </template>
   
-    <script src="{{ url('js/jquery-3.0.0.min.js') }}"></script>
+    <script src="{{ url('js/jquery-3.0.0.min.js') }}"></script>    
     <script src="{{ url('js/vue.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.9.1/vue-resource.js"></script>
     <script src="{{ url('js/notes.js') }}"></script>
 
 @endsection()
