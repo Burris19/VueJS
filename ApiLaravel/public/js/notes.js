@@ -35,11 +35,10 @@ Vue.component('note-row', {
         };
     },
     methods: {
-
-        edit: function () {
+        show: function () {
             this.errors = [];
             this.draft = $.extend( {}, this.note);
-            this.editing = true;
+            this.editing = true;            
         },
         cancel: function () {
             this.editing = false;
@@ -95,13 +94,8 @@ var vm = new Vue({
             this.notes = response.data;
         });
 
-        Vue.http.interceptors.push({
-
-            request: function (request) {
-                return request;
-            },
-
-            response: function (response) {
+        Vue.http.interceptors.push(function (request, next) {
+            next(function (response) {
                 if (response.ok) {
                     return response;
                 }
@@ -117,9 +111,9 @@ var vm = new Vue({
                 }, 4000);
  
                 return response;
-            }.bind(this)
-
+            });
         });
+
 
     },
     methods: {
