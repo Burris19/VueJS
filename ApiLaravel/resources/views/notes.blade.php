@@ -4,8 +4,16 @@
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
       <h1>Styde.net / Curso de VueJS</h1>
+      
+      <div class="alert_container">
+        
+        <p  v-show="alert.display"
+            class="alert alert-danger" 
+            id="error_message" 
+            transition="fade" >@{{ alert.message }}</p>
 
-      <p v-show="error" class="alert alert-danger" id="error_message">@{{ error }}</p>
+      </div>
+
 
       <table class="table table-striped">
         <tr>
@@ -13,7 +21,13 @@
           <th>Nota</th>
           <th width="50px">&nbsp;</th>
         </tr>
-        <tr v-for="note in notes" is="note-row" :note.sync="note" :categories="categories"></tr>
+        <tr 
+            v-for="note in notes" 
+            is="note-row" 
+            :note.sync="note" 
+            :categories="categories"
+            @update-note="updateNote"
+            @delete-note="deleteNote"></tr>
         <tr>
             <td><select-category :categories="categories" :id.sync="new_note.category_id"></select-category></td>
             <td>
@@ -47,7 +61,7 @@
   </template>
 
   <template id="note_row_tpl">
-    <tr>
+    <tr class="animated" transition="bounce-out">
       <template v-if="! editing">
         <td>@{{ note.category_id | category }}</td>
         <td>@{{ note.note }}</td>
@@ -75,10 +89,29 @@
       </template>
     </tr>
   </template>
+
+  <style>
+    .fade-transition {
+      transition: all 1s ease;
+      opacity: 100;
+      background: orange;
+    }
+    .fade-enter, .fade-leave {
+      background: red;
+      opacity: 0;
+    }
+    
+    .alert_container { 
+      height:  60px
+    }
+
+  </style>
   
-    <script src="{{ url('js/jquery-3.0.0.min.js') }}"></script>    
-    <script src="{{ url('js/vue.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.9.1/vue-resource.js"></script>
-    <script src="{{ url('js/notes.js') }}"></script>
+<script src="{{ url('js/jquery-3.0.0.min.js') }}"></script>    
+<script src="{{ url('js/vue.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.9.1/vue-resource.js"></script>
+<script src="{{ url('js/notes.js') }}"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
 
 @endsection()

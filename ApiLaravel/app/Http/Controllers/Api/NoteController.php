@@ -94,6 +94,9 @@ class NoteController extends Controller
      */
     public function destroy($id)
     {
+
+        // abort(404, 'Something is wrong!');
+
         $note = Note::findOrFail($id);
 
         $note->delete();
